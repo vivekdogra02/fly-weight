@@ -1,5 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
-
-const rootReducer = combineReducers({});
+import reducer from '../features/rocket-launch/rocketLaunchSlice';
+const rootReducer = {
+    rocketDisplay: reducer,
+};
 
 export default rootReducer;

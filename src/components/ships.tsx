@@ -1,4 +1,5 @@
 import { Chip } from "@material-ui/core";
+import React from "react";
 
 export const Ships = ({ ships }: any) => {
   const renderedShips = ships.map((ship: any, index: number) => (
@@ -9,3 +10,5 @@ export const Ships = ({ ships }: any) => {
 
   return (renderedShips);
 };
+
+export default React.memo(Ships);

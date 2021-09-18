@@ -18,21 +18,19 @@ import {
   teal,
   lightBlue,
 } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Ships } from "../../components/ships";
 import Link from "@material-ui/core/Link";
+import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       maxWidth: 300,
+      width: 250,
       margin: theme.spacing(2),
     },
     card: {
-      maxWidth: 300,
       margin: theme.spacing(4),
     },
     media: {
@@ -55,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const RocketCard = ({ rocketLaunched }: any) => {
+export const RocketCard = ({ loading, rocketLaunched }: any) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
@@ -66,18 +64,35 @@ export const RocketCard = ({ rocketLaunched }: any) => {
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            {rocketLaunched.flight_number}
-          </Avatar>
+          loading ? (
+            <Skeleton
+              animation="wave"
+              variant="circle"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <Avatar aria-label="recipe" className={classes.avatar}>
+              {rocketLaunched.flight_number}
+            </Avatar>
+          )
         }
         title={rocketLaunched.mission_name}
         subheader={new Date(rocketLaunched.launch_date_utc).toDateString()}
       />
-      <CardMedia
-        className={classes.media}
-        image={rocketLaunched.links.flickr_images[0]}
-        title="Paella dish"
-      />
+      {loading ? (
+        <Skeleton animation="wave" variant="rect" className={classes.media} />
+      ) : (
+        <CardMedia
+          className={classes.media}
+          image={
+            rocketLaunched.links.flickr_images[0]
+              ? rocketLaunched.links.flickr_images[0]
+              : "https://live.staticflickr.com/65535/50630802488_8cc373728e_o.jpg"
+          }
+        />
+      )}
+
       <CardContent>
         <Typography
           color="textSecondary"
@@ -140,7 +155,7 @@ export const RocketCard = ({ rocketLaunched }: any) => {
               <Link href={rocketLaunched.links.wikipedia} target="_blank">
                 Wiki
               </Link>
-            </span> {" "}
+            </span>{" "}
             <span>
               <Link href={rocketLaunched.links.video_link} target="_blank">
                 Youtube
@@ -155,3 +170,5 @@ export const RocketCard = ({ rocketLaunched }: any) => {
     </Card>
   );
 };
+
+export default React.memo(RocketCard);
